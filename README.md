@@ -1,137 +1,144 @@
-# Prologue - Jekyll Theme
+# Hydeout
 
-[![Gem Version](https://badge.fury.io/rb/jekyll-theme-prologue.svg)](https://badge.fury.io/rb/jekyll-theme-prologue)
+Hydeout updates the original [Hyde](https://github.com/poole/hyde)
+theme for [Jekyll](http://jekyllrb.com) 3.x and adds new functionality.
 
-![Prologue Theme](assets/images/screenshot.png "Prologue Theme Screenshot")
+![Desktop](/_screenshots/1.png?raw=true)
+<img alt="Mobile home page" src="/_screenshots/2.png?raw=true" width="300px" />
+<img alt="Mobile post page" src="/_screenshots/3.png?raw=true" width="300px" />
 
-This is Prologue, a simple, single page responsive site template from [HTML5 UP](https://html5up.net/prologue), now available as a blog-aware Jekyll theme from [Chris Bobbe](https://chrisbobbe.github.io). It features a clean, minimalistic design and a sticky sidebar with navigation-linked scrolling.
+### Usage
 
-**Demo**: https://chrisbobbe.github.io/jekyll-theme-prologue/
+Hydeout is available as the `jekyll-theme-hydeout` Ruby Gem.
+Add `gem "jekyll-theme-hydeout", "~> 3.4"` to your Gemfile and run
+`bundle install`.
 
-# Added Features
-
-* **Blogging and multi-page features you expect from Jekyll**
-* Compatible with GitHub Pages
-* **[Formspree.io](https://formspree.io/) contact form integration** - just add your email to the `_config.yml` and it works!
-* Build your homepage with **custom scrolly sections** in the _sections folder
- * Set a **cover photo** for any section (not just the first), with alt text for screen readers and SEO
-* Add your **social profiles** easily in `_config.yml`.
-* Automatic search engine optimization (SEO) **meta tags** based on info you provide in `_config.yml` and frontmatter
-* **Google Analytics** built-in; just put your [Tracking ID](https://support.google.com/analytics/answer/1008080?hl=en) in `_config.yml` as `google_analytics`
-* Custom **404 page** (called 404.html; to activate, move it to your project directory).
-
-# Installation
-
-There are two ways to get started (choose one):
-
-1. **Install the [jekyll-theme-prologue gem](https://rubygems.org/gems/jekyll-theme-prologue).** Instructions are in the [Jekyll docs](https://jekyllrb.com/docs/themes/#installing-a-theme). After running `bundle install`, you can find the theme files by running `open $(bundle show jekyll-theme-prologue)`.  A sample working `_config.yml` file ships with the gem; if you want to activate it, move it to your project's root directory. It will do nothing until you move it there, replacing the default `_config.yml` file.
-2. **Fork or clone the [GitHub repository](https://github.com/chrisbobbe/jekyll-theme-prologue).** If you want to use [GitHub Pages](https://pages.github.com/), create a branch named `gh-pages`, and replace `theme: jekyll-theme-prologue` with `remote_theme: chrisbobbe/jekyll-theme-prologue` in the provided `_config.yml` ([GitHub Pages now supports open-source themes on GitHub](https://github.com/blog/2464-use-any-theme-with-github-pages)).
-
-Next, make sure that `url` and `base_url` are set for your own website in `_config.yml`. For local testing, make them both blank. Add a photo avatar to your project, then set `avatar: path/to/your/avatar.jpg` in _config.yml; for example, `avatar: assets/images/avatar.jpg` (48x48 pixels works best). Poke around the sample `_config.yml` file to see how you can add your social profiles.
-
-# Build your homepage
-
-1. **Your `_config.yml` file must include the following line or your homepage won't work**: `collections: [sections]`. This tells Jekyll to look in the _sections folder (which you will create) for your content and render it all on one page.
-
-2. **Create a `_sections` folder** in your project's root directory and start adding content to your homepage. Set a cover photo in any of the sections by adding `cover-photo: path/to/photo.jpg` and `cover-photo-alt: your alt text here` to the section's frontmatter. Sample content is provided in the [GitHub repository](https://github.com/chrisbobbe/jekyll-theme-prologue/tree/master/_sections).
-
-All new sections should be added as html or Markdown documents in the `_sections` folder. The following section variables can be set with [frontmatter](https://jekyllrb.com/docs/frontmatter/):
-- `title` (required)
-- `order` (required; orders the sequence of sections on the page. Example: `1`)
-- `cover-photo` (optional; sets a background image for the section. Example: `assets/images/banner.jpg`)
-- `cover-photo-alt` (required if using a cover photo. Describes the photo for screen readers and SEO; e.g. "Dome of Light art installation, Kaohsiung, Taiwan")
-- `icon` (optional; see [Font Awesome](http://fontawesome.io/icons/) for icon codes. Example: `fa-github`)
-- `auto-header` (optional; "use-title" is default, "none" for no header, or custom header text)
-- `hide` (optional; if `true`, the section won't appear)
-
-# Start blogging!
-
-Jekyll has great resources to get you started writing blog posts. Check out [this Jekyll Docs page](https://jekyllrb.com/docs/posts/) first. When you've written a post or two, copy the following into a new file in your project directory called `blog.html`, and you'll see a link to your blog from the homepage:
+Hydeout uses pagination, so if you have an `index.md`, you'll need to swap
+it with an `index.html` that uses the `index` layout:
 
 ```
 ---
-layout: blog
-title: My Blog
+layout: index
+title: Home
 ---
 ```
 
--- and that's it!
+### Keep It Simple
 
-# Add a page
+In keeping with the original Hyde theme, Hydeout aims to keep the overall
+design lightweight and plugin-free. JavaScript is currently limited only
+to Disqus and Google Analytics (and is only loaded if you provide configuration
+variables).
 
-To add a page, just make a new .html or .md file in your project directory. There's an example called `reading-list` [provided](https://github.com/chrisbobbe/jekyll-theme-prologue/blob/master/reading-list.md) with the GitHub repository. Add this frontmatter:
+Hydeout makes heavy use of Flexbox in its CSS. If Flexbox is not available,
+the CSS degrades into a single column layout.
 
+### Customization
+
+Hydeout replaces Hyde's class-based theming with the use
+of the following SASS variables:
+
+```scss
+$sidebar-bg-color: #202020 !default;
+$sidebar-sticky: true !default;
+$layout-reverse: false !default;
+$link-color: #268bd2 !default;
 ```
+
+To override these variables, create your own `assets/css/main.scss` file.
+Define your own variables, then import in Hydeout's SCSS, like so:
+
+```scss
 ---
-title: My New Page
-layout: page
+# Jekyll needs front matter for SCSS files
 ---
+
+$sidebar-bg-color: #ac4142;
+$link-color: #ac4142;
+$sidebar-sticky: false;
+@import "hydeout";
 ```
 
-You can also set these page variables in the frontmatter, if you want:
-- `subtitle`
-- `order` (orders links in the nav menu, e.g. `1`)
-- `icon` (optional; see [Font Awesome](http://fontawesome.io/icons/) for icon codes. Example: `fa-github`)
-- `hide` (optional; if `true`, a link won't appear in the nav menu. All this does is remove the nav link; your page will still be served to anyone who has the URL.)
+See the [_variables](_sass/hydeout/_variables.scss) file for other variables
+you can override.
 
-**This same set of frontmatter variables (including `title`) can also be set in `index.md` and `blog.html`.** You may want to give them titles, or hide the homepage link with `hide: true` if the homepage is the only page.
+You can see the full set of partials you can replace in the
+[`_includes`](_includes) folder, but there are a few worth noting:
 
-For advanced SEO, this theme also lets you add `permalink` (see [Jekyll Docs](https://jekyllrb.com/docs/permalinks/#where-to-configure-permalinks)), `robots` (string, e.g. "noindex, nofollow"), and `canonical` (boolean; true is default) to any page or post.
+* `_includes/copyright.html` - Insert your own copyright here.
 
-# Contributing
+* `_includes/custom-head.html` - Insert custom head tags (e.g. to load your
+  own stylesheets)
 
-Please feel free to submit issues and feature requests!
+* `_includes/custom-foot.html` - Insert custom elements at the end of the
+  body (e.g. for custom JS)
 
-# Credits
+* `_includes/custom-nav-links.html` - Additional nav links to insert at the
+  end of the list of links in the sidebar.
 
-Thanks to @andrewbanchich for his many Jekyll adaptations of HTML5 UP's elegant themes, which helped and inspired me, and of course many thanks to HTML5 UP.
+  Pro-tip: The `nav`s in the sidebar are flexboxes. Use the `order` property
+  to order your links.
 
-Original README from HTML5 UP:
+* `_includes/custom-icon-links.html`- Additional icon links to insert at the
+  end of the icon links at the bottom of the sidebar. You can use the `order`
+  property to re-order.
 
-```
-Prologue by HTML5 UP
-html5up.net | @ajlkn
-Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
+* `_includes/favicons.html` - Replace references to `favicon.ico` and
+  `favicon.png` with your own favicons references.
 
+* `_includes/font-includes.html` - The Abril Fatface font used for the site
+  title is loaded here. If you're overriding that font in the CSS, be sure
+  to also remove the font load reference here.
 
-This is Prologue, a simple, single page responsive site template. It features a
-clean, minimalistic design and a sticky sidebar with navigation-linked scrolling.
+### New Features
 
-Demo content images* are courtesy of the ridiculously talented Felicia Simion. Check out
-more of her amazing work over at deviantART:
+* Hydeout adds a new tags page (accessible in the sidebar). Just create a
+  new page with the tags layout:
 
-http://ineedchemicalx.deviantart.com/
+  ```
+  ---
+  layout: tags
+  title: Tags
+  ---
+  ```
 
-(* = Not included! Only meant for use with my own on-site demo, so please do NOT download
-and/or use any of Felicia's work without her explicit permission!)
+* Hydeout adds a new "category" layout for dedicated category pages.
+  Category pages are automatically added to the sidebar. All other pages
+  must have `sidebar_link: true` in their front matter to show up in
+  the sidebar. To create a category page, use the `category` layout"
 
-Demo banner images* courtesy of Unsplash, a radtastic collection of CC0 (public domain)
-images you can use for pretty much whatever.
+  ```
+  ---
+  layout: category
+  title: My Category
+  ---
 
-(* = Not included)
+  Description of "My Category"
+  ```
 
-AJ
-aj@lkn.io | @ajlkn
+* A simple redirect-to-Google search is available. Just create a page with
+  the `search` layout.
 
-PS: Not sure how to get that contact form working? Give formspree.io a try (it's awesome).
+  ```
+  ---
+  layout: search
+  title: Google Search
+  ---
+  ```
 
+* Disqus integration is ready out of the box. Just add the following to
+  your config file:
 
-Credits:
+  ```yaml
+  disqus:
+    shortname: my-disqus-shortname
+  ```
 
-	Demo Images:
-		Felicia Simion (ineedchemicalx.deviantart.com)
-		Unsplash (unsplash.com)
+  If you don't want Disqus or want to use something else, override
+  `comments.html`.
 
-	Icons:
-		Font Awesome (fortawesome.github.com/Font-Awesome)
+* For Google Analytics support, define a `google_analytics` variable with
+  your property ID in your config file.
 
-	Other
-		jQuery (jquery.com)
-		html5shiv.js (@afarkas @jdalton @jon_neal @rem)
-		CSS3 Pie (css3pie.com)
-		background-size polyfill (github.com/louisremi)
-		Respond.js (j.mp/respondjs)
-		jquery.scrolly (@ajlkn)
-		jquery.scrollzer (@ajlkn)
-		Skel (skel.io)
-```
+There's also a bunch of minor tweaks and adjustments throughout the
+theme. Hope this works for you!
