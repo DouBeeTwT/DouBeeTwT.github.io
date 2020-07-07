@@ -178,7 +178,7 @@ a {
 
 .article-list {
   float: left;
-  width: 695px; }
+  width: 100%; }
   .article-list .article-item {
     width: 100%;
     margin-bottom: 16px;
