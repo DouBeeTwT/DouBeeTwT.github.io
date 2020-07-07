@@ -860,7 +860,7 @@ a {
   .night-mode .token.keyword {
     color: #61BDCF; }
 
-@media screen and (min-width: 2080px) {
+@media screen and (min-width: 1920px) {
   .home-banner {
     height: 600px; }
     .home-banner h2 {
@@ -869,7 +869,7 @@ a {
     .home-banner h3 {
       font-size: 22px; } }
 
-@media screen and (max-width: 2080px) {
+@media screen and (max-width: 1735px) {
   .g-container {
     width: auto; }
   .article-list {
