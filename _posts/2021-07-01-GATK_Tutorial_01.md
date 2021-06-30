@@ -1,12 +1,12 @@
 ---
 layout: post
-title: 'GATK4基础流程SNP筛选'
-subtitle: ''
+title: 'DNA二代测序数据的SNP挖掘基础流程'
+subtitle: '基于GATK基础流程使用的代码合集与简单解释'
 date: 2021-07-01
 categories:
  - tutorial
  - Updating
-tags: GATK
+tags: GATK, NGS
 ---
 
 ## 0 软件准备
@@ -61,6 +61,25 @@ GATK BaseRecalibrator \
 GATK ApplyBQSR -R [Genome] -I [Name].fixed.bam -bqsr [Name].recal.table -O [Name].bqsr.bam
 ```
 
+如果处理的是肿瘤/正常配对数据，需要在 [Fix Mate Information] 后加入局部重比对
+
+```bash
+GATK3 -T RealignerTargetCreator \
+      -R ${Ref} \
+      -known ${Ind1} \
+      -known ${Ind2} \
+      -I $Directory_Output/${SampleName[$i]}/$Chr/${SampleName[$i]}.$Chr.fixed.bam \
+      -o TMP/${SampleName[$i]}.$Chr.realn.intervals
+           
+GATK3 -T IndelRealigner \
+      -R ${Ref} \
+      -known ${Ind1} \
+      -known ${Ind2} \
+      -targetIntervals TMP/${SampleName[$i]}.$Chr.realn.intervals \
+      -I $Directory_Output/${SampleName[$i]}/$Chr/${SampleName[$i]}.$Chr.fixed.bam \
+      -o $Directory_Output/${SampleName[$i]}/$Chr/${SampleName[$i]}.$Chr.realn.bam
+```
+
 
 
 ### 1.4 SNP获取
@@ -95,7 +114,31 @@ GATK ApplyBQSR -R [Genome] -I [Name].fixed.bam -bqsr [Name].recal.table -O [Name
 - 肿瘤、正常配对数据
 
   ```bash
+  # Do this Step !!!twice!!! for Tumor and Normal
+  GATK GetPileupSummaries \
+       -I [Name].bqsr.bam \
+       -V [AF_ONLY_GENOMAD] \
+       -L [Name].vcf \
+       -O [Name].getpileupsummaries.table
   
+  # Using the .table files creadted last step
+  GATK CalculateContamination \
+       -I [Tumor].getpileupsummaries.table \
+       -matched [Normal].getpileupsummaries.table\
+       -O [Name].calculatecontamination.table
+       
+  GATK FilterMutectCalls \
+       -R [Genome] \
+       -V [Name].vcf \
+       --contamination-table [Name].calculatecontamination.table \
+       -O [Name].filtered.vcf
+   
+  GATK4 VariantFiltration \
+          -R [Genome] -V [Name].filtered.vcf \
+          -filter "AF < 0.01 || DP < 500" --filter-name "My_Filter" \
+          -O [Name].refiltered.vcf
+  
+  GATK SelectVariants -R [Genome] --exclude-filtered -V [Name].refiltered.vcf -O [Name].PASS.vcf
   ```
 
   
